@@ -196,7 +196,6 @@ def getArtificialDoublets(x, n=3000, clusters=None,
     # number of doublets to generate randomly in each step
     nr = int(np.ceil(n * propRandom))
     if nr > 0:
-        # FIX: Handle dictionary return properly
         result_dict = getArtificialDoublets(x, n=nr, clusters=clusters, halfSize=halfSize, 
                                           resamp=resamp, propRandom=1, adjustSize=adjustSize,
                                           random_state=random_state)
@@ -214,7 +213,7 @@ def getArtificialDoublets(x, n=3000, clusters=None,
             ad_m = np.zeros((n_genes, 0), dtype=x.dtype)
         
         oc = []
-        colnames = []  # FIX: Define colnames
+        colnames = []  
     
     # TODO: Add cluster-based doublet generation for remaining n doublets
     # For now, just return what we have from the random portion
@@ -258,7 +257,7 @@ def createDoublets(x, dbl_idx, resamp=0.5,
 
     x = x1
 
-    # FIX: Initialize half_indices to handle variable scope
+    # Initialize half_indices to handle variable scope
     half_indices = np.array([], dtype=int)
     
     if halfSize > 0:
@@ -266,7 +265,6 @@ def createDoublets(x, dbl_idx, resamp=0.5,
         half_indices = rng.choice(n_cols, size=int(np.ceil(halfSize * n_cols)), replace=False)
         
         if issparse(x):
-            # FIX: Proper sparse matrix handling
             dense_cols = x[:, half_indices].toarray() / 2
             # Create new sparse matrix with modified columns
             x_dense = x.toarray()
@@ -285,7 +283,6 @@ def createDoublets(x, dbl_idx, resamp=0.5,
     
         if len(resamp_indices) > 0:
             if issparse(x):
-                # FIX: Proper sparse matrix handling for Poisson sampling
                 x_dense = x.toarray()
                 sampled = rng.poisson(x_dense[:, resamp_indices])
                 x_dense[:, resamp_indices] = sampled
