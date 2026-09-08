@@ -8,7 +8,7 @@ import dbldec_utils as utils
 def calculate_naive_doublet_score(adata):
     n_neighbors = int(np.sqrt(adata.shape[0]))
 
-    sc.tl.pca(adata, n_comps=30)
+    sc.pp.pca(adata, n_comps=30)
     sc.pp.neighbors(adata, n_neighbors=n_neighbors, n_pcs=30, metric="euclidean")
     
     simulated_score = []
@@ -25,11 +25,6 @@ def calculate_naive_doublet_score(adata):
 def add_naive_doublet_score(adata):
     naive_score = calculate_naive_doublet_score(adata)
     adata.obs['naive_doublet_score'] = naive_score
-
-    adata.X = adata.raw.X.copy()
-    utils.normalize(adata)
-    utils.log_transform(adata)
-    utils.preprocess(adata)
 
 def remove_naive_doublets(adata):
     print('Removing naive doublets...')
