@@ -12,12 +12,13 @@ def normalize(adata):
 def log_transform(adata):
     sc.pp.log1p(adata)
 
-def preprocess(adata):
+def preprocess(adata, compute_umap=False):
     n_neighbors = int(np.sqrt(adata.shape[0]))
 
     sc.pp.pca(adata, svd_solver='arpack', n_comps=30)
     sc.pp.neighbors(adata, n_neighbors=n_neighbors, n_pcs=30, metric='euclidean')
-    sc.tl.umap(adata)
+    if compute_umap:
+        sc.tl.umap(adata)
 
 def visualize_real_doublets(adata):
     pca_coords = adata.obsm['X_pca'][:, :2]
